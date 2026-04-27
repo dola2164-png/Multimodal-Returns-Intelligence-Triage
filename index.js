@@ -1,44 +1,64 @@
+import express from "express";
+import cors from "cors";
+import multer from "multer";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import fs from "fs";
 import 'dotenv/config';
 import { SYSTEM_PROMPT } from "./prompt.js";
 
+const app = express();
+app.use(cors()); // Allow frontend to communicate
+app.use(express.json());
+
+// Set up Multer to keep the uploaded image in memory (no need to save to disk!)
+const upload = multer({ storage: multer.memoryStorage() });
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-function fileToGenerativePart(path, mimeType) {
-  return {
-    inlineData: {
-      data: Buffer.from(fs.readFileSync(path)).toString("base64"),
-      mimeType
-    },
-  };
-}
-
-async function runTest() {
-    const model = genAI.getGenerativeModel({ 
-        model: "gemini-3-flash", 
-        generationConfig: { responseMimeType: "application/json" }
-      });
-
-//   const imagePath = "./ydog.png";
-const imagePath = "./dress.png";
-  const imagePart = fileToGenerativePart(imagePath, "image/png"); // Make sure this says png, not jpeg!
-
-//   const imagePart = fileToGenerativePart(imagePath, "image/jpeg");
-  const customerReason = "I want to return this stroller. The box arrived completely crushed and I'm worried it's broken inside.";
-
+// THIS MATCHES YOUR FRONTEND FETCH URL
+app.post("/api/triage", upload.single("image"), async (req, res) => {
   try {
-    const result = await model.generateContent([
-      SYSTEM_PROMPT, 
-      imagePart, 
-      `Customer Reason: ${customerReason}`
-    ]);
-    
-    const jsonResponse = JSON.parse(result.response.text());
-    console.dir(jsonResponse, { depth: null, colors: true });
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+    if (!req.file) {
+      return res.status(400).send("No image provided");
+    }
+    if (!req.body.customerReason) {
+      return res.status(400).send("No return reason provided");
+    }
 
-runTest();
+    console.log("Analyzing return request...");
+
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-3-flash-preview",
+      generationConfig: { responseMimeType: "application/json" }
+    });
+
+    // Convert the uploaded file buffer directly into Gemini's format
+    const imagePart = {
+      inlineData: {
+        data: req.file.buffer.toString("base64"),
+        mimeType: req.file.mimetype
+      }
+    };
+
+    // Call Gemini
+    const result = await model.generateContent([
+      SYSTEM_PROMPT,
+      imagePart,
+      `Customer Reason: ${req.body.customerReason}`
+    ]);
+
+    const jsonResponse = JSON.parse(result.response.text());
+    
+    // Send the JSON back to the React frontend
+    res.json(jsonResponse);
+
+  } catch (error) {
+    console.error("Backend Error:", error);
+    res.status(500).send("Failed to process image.");
+  }
+});
+
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Mumzworld AI Backend running on http://localhost:${PORT}`);
+});
