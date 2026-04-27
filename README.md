@@ -1,13 +1,8 @@
-# 🌟 Mumzworld AI Returns Triage Portal
+[# 🌟 Mumzworld AI Returns Triage Portal
 
 **Track A — AI Engineering Intern Submission by Sayani Adak**
 
 An intelligent, fully bilingual (English & Arabic) returns triage application built for Mumzworld. This platform leverages the Gemini API to automatically analyze customer return requests—combining multimodal image reasoning with strict business logic to approve, reject, or escalate returns in real-time.
-
----
-
-### 🎥 3-Minute Loom Walkthrough
-👉 **[Watch the Live Demo & Architecture Walkthrough Here]** *(Insert your Loom link here!)*
 
 ---
 
@@ -48,3 +43,4 @@ Want to run the triage engine locally? Follow these steps:
 ```bash
 git clone [https://github.com/yourusername/mumzworld-returns-ai.git](https://github.com/yourusername/mumzworld-returns-ai.git)
 cd mumzworld-returns-ai
+](https://github.com/dola2164-png/Multimodal-Returns-Intelligence-Triage)
