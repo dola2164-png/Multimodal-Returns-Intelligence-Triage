@@ -30,8 +30,7 @@ I built a full-stack MERN application that acts as a first-line triage engine. B
 ## 📂 Deliverable Documentation
 To fulfill the evaluation rigor and architecture requirements of the brief, please review the following documents in this repository:
 
-1. **[`EVALS.md`](./EVALS.md):** Systematic testing of 10 visual/textual edge cases (including hygiene violations and image mismatches) proving the AI's reasoning capabilities.
-2. **[`TRADEOFFS.md`](./TRADEOFFS.md):** My engineering documentation explaining the "Build vs. Buy" API decision, model selection, and prompt engineering constraints.
+1. **[`EVALS.md`](./EVALS.md):** Systematic testing of some visual/textual edge cases (including hygiene violations and image mismatches) proving the AI's reasoning capabilities.
 
 ---
 
