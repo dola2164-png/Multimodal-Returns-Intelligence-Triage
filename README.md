@@ -68,3 +68,24 @@ Want to run the triage engine locally? Follow these steps:
 ```bash
 git clone [https://github.com/dola2164-png/Multimodal-Returns-Intelligence-Triage.git](https://github.com/dola2164-png/Multimodal-Returns-Intelligence-Triage.git)
 cd Multimodal-Returns-Intelligence-Triage
+
+
+Set up the Backend
+Bash
+# Navigate to the root directory
+npm install express cors multer @google/generative-ai dotenv
+
+# Create a .env file and add your Gemini API Key
+echo "GEMINI_API_KEY=your_api_key_here" > .env
+
+# Start the Express server
+node index.js
+The backend will start running on http://localhost:3000
+
+3. Set up the Frontend
+Bash
+# Open a new terminal instance and navigate to your React frontend folder
+npm install
+
+# Start the Vite development server
+npm run dev
